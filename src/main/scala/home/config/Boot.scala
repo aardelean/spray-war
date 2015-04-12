@@ -2,6 +2,9 @@ package home.config
 
 import akka.actor.{Props, ActorSystem}
 import home.endpoints.Index
+import net.fwbrasil.activate.ActivateContext
+import net.fwbrasil.activate.storage.relational.PooledJdbcRelationalStorage
+import net.fwbrasil.activate.storage.relational.idiom.mySqlDialect
 import spray.servlet.WebBoot
 
 // This class is instantiated by the servlet initializer.
@@ -21,4 +24,15 @@ class Boot extends WebBoot {
     // put additional cleanup code here
     system.log.info("Application shut down")
   }
+}
+
+object persistenceContext extends ActivateContext {
+  val storage = new PooledJdbcRelationalStorage {
+    val jdbcDriver = "com.mysql.jdbc.Driver"
+    val user = new Some("root")
+    val password = new Some("root")
+    val url = "jdbc:mysql://localhost:3306/users"
+    val dialect = mySqlDialect
+  }
+  override protected def entitiesPackages = List("home.model")
 }
