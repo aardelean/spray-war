@@ -28,7 +28,11 @@ libraryDependencies ++= Seq(
   "org.specs2"          %%  "specs2-core"   % "2.3.11" % "test",
   "org.eclipse.jetty" % "jetty-webapp" % "9.1.0.v20131115" % "container, compile",
   "org.scala-lang.modules" %% "scala-xml" % "1.0.0",
-  "org.infinispan" % "infinispan-embedded" % "7.1.1.Final"
+  "org.infinispan" % "infinispan-embedded" % "7.1.1.Final",
+  "org.scala-lang.modules" %% "scala-xml" % "1.0.0",
+  "net.fwbrasil" %% "activate-core" % "1.7",
+  "net.fwbrasil" %% "activate-jdbc" % "1.7",
+  "mysql" % "mysql-connector-java" % "5.1.27"
 )
 
 javaOptions ++= Seq(

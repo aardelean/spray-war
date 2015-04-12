@@ -4,6 +4,10 @@ import akka.actor.{Props, ActorSystem}
 import home.endpoints.Endpoint
 import org.infinispan.manager.DefaultCacheManager
 import spray.routing.SimpleRoutingApp
+import home.endpoints.Index
+import net.fwbrasil.activate.ActivateContext
+import net.fwbrasil.activate.storage.relational.PooledJdbcRelationalStorage
+import net.fwbrasil.activate.storage.relational.idiom.mySqlDialect
 import spray.servlet.WebBoot
 
 // This class is instantiated by the servlet initializer.
