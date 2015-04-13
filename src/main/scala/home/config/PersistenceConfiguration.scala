@@ -15,6 +15,6 @@ object PersistenceConfiguration extends ActivateContext {
     val url = "jdbc:mysql://localhost:3306/users"
     val dialect = mySqlDialect
   }
-  override protected def entitiesPackages = List("home.model")\
+  override protected def entitiesPackages = List("home.model")
 
 }
