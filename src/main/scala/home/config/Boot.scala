@@ -1,7 +1,9 @@
 package home.config
 
 import akka.actor.{Props, ActorSystem}
-import home.endpoints.Index
+import home.endpoints.Endpoint
+import org.infinispan.manager.DefaultCacheManager
+import spray.routing.SimpleRoutingApp
 import spray.servlet.WebBoot
 
 // This class is instantiated by the servlet initializer.
@@ -15,10 +17,15 @@ class Boot extends WebBoot {
   implicit val system = ActorSystem("webapp")
 
   // the service actor replies to incoming HttpRequests
-  val serviceActor = system.actorOf(Props[Index], "index-test")
+  val serviceActor = system.actorOf(Props[Endpoint], "endpoint")
+  // the service actor replies to incoming HttpRequests
+
 
   system.registerOnTermination {
     // put additional cleanup code here
     system.log.info("Application shut down")
   }
+}
+object InfinispanConfig{
+  val embeddedCacheManager = new DefaultCacheManager("infinispan.xml");
 }
