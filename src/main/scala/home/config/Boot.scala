@@ -13,6 +13,7 @@ import spray.servlet.WebBoot
 // It must implement the spray.servlet.WebBoot trait.
 class Boot extends WebBoot {
 
+  InfinispanConfig.cache
   // we need an ActorSystem to host our application in
   implicit val system = ActorSystem("webapp")
 
@@ -25,7 +26,4 @@ class Boot extends WebBoot {
     // put additional cleanup code here
     system.log.info("Application shut down")
   }
-}
-object InfinispanConfig{
-  val embeddedCacheManager = new DefaultCacheManager("infinispan.xml");
 }
