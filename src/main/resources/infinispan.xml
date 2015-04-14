@@ -1,16 +1,16 @@
 <infinispan
         xsi:schemaLocation="urn:infinispan:config:7.1 http://www.infinispan.org/schemas/infinispan-config-7.1.xsd"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:infinispan:config:7.1">
-    <!--<global>-->
-        <!--<transport>-->
-            <!--<properties>-->
-                <!--<property name="configurationFile" value="jgroups.xml" />-->
-            <!--</properties>-->
-        <!--</transport>-->
-    <!--</global>-->
-    <cache-container name="default" default-cache="defaultCache">
-        <local-cache name="store">
-           <expiration interval="30000" lifespan="30000" />
+    <jgroups>
+        <stack-file name="transportStack" path="default-configs/default-jgroups-udp.xml"/>
+    </jgroups>
+    <cache-container name="default" default-cache="replicatedKintakaWording">
+        <transport stack="transportStack"/>
+        <local-cache name="kintakaWording">
+
         </local-cache>
+        <replicated-cache name="replicatedKintakaWording" mode="ASYNC" >
+            <expiration interval="30000" lifespan="30000" />
+        </replicated-cache>
     </cache-container>
 </infinispan>

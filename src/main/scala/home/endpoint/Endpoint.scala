@@ -14,23 +14,27 @@ import spray.routing.HttpServiceActor
 class Endpoint() extends HttpServiceActor with ActorLogging{
 
   override def receive = runRoute{
-    path("index") {
+    path("persist") {
       get {
         parameter('key) {
           (key) => {
-            complete(InfinispanConfig.cache.get(key))
+            val value = InfinispanConfig.cache.get(key);
+            if (value!=null)  complete(value) else complete(s"NOT FOUND VALUE FOR KEY $key")
           }
         }
       } ~
       post {
         formFields('key.as[String] , 'value.as[String]) {
           (key :String , value :String) => {
-            InfinispanConfig.cache.put(key, value)
+           InfinispanConfig.cache.put(key, value)
             complete("SUCCESS "+key)
           }
         }
       }
-
+    } ~ path("check"){
+      get {
+        complete("VERIFIED!")
+      }
     }
   }
 }

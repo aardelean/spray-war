@@ -9,9 +9,6 @@ import org.infinispan.manager.DefaultCacheManager
 
 object InfinispanConfig{
   val embeddedCacheManager = new DefaultCacheManager("infinispan.xml")
-  def cache = {
-    val cache:Cache[String, String] = embeddedCacheManager.getCache("store")
-    cache
-  }
+  def cache = embeddedCacheManager.getCache[String, String]("replicatedKintakaWording")
 }
 

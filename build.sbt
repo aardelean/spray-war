@@ -33,7 +33,8 @@ libraryDependencies ++= Seq(
 
 javaOptions ++= Seq(
   "-Xdebug",
-  "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9001"
+  "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9001",
+  "-Djava.net.preferIPv4Stack=true"
 )
 
 jetty()
