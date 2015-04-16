@@ -24,46 +24,44 @@ class Endpoint() extends HttpServiceActor with ActorLogging{
   implicit val timeout : Timeout = 5 seconds
   val actor : ActorRef = context.actorOf(Props[ServiceActor])
 
-  override def receive = runRoute{
-    path("persist") {
-      get {
-        parameter('p){ (p)=>
-          transactional() {
-            new Person(new Date().toString)
+  override def receive = runRoute {
+    pathPrefix("spray") {
+      path("persist") {
+        get {
+          parameter('p) { (p) =>
+            transactional() {
+              new Person(new Date().toString)
+            }
+            complete("persisted")
           }
-          complete("persisted")
         }
-      }
-    } ~ path("index") {
-      get {
-        parameter('key) {
-          (key) => {
-            val value = InfinispanConfiguration.cache.get(key)
-            if (value != null) {
-              complete(value)
-            } else {
-              complete("COULD NOT FIND!")
+      } ~ path("index") {
+        get {
+          parameter('key) {
+            (key) => {
+              val value = InfinispanConfiguration.cache.get(key)
+              if (value != null) {
+                complete(value)
+              } else {
+                complete("COULD NOT FIND!")
+              }
             }
           }
-        }
-      } ~
-        post {
-          formFields('key.as[String], 'value.as[String]) {
-            (key: String, value: String) => {
-              InfinispanConfiguration.cache.put(key, value)
-              complete("SUCCESS " + key)
+        } ~
+          post {
+            formFields('key.as[String], 'value.as[String]) {
+              (key: String, value: String) => {
+                InfinispanConfiguration.cache.put(key, value)
+                complete("SUCCESS " + key)
+              }
             }
           }
-        }
-    } ~ path("landingPage"){
-      get{
-        getFromResource("application.conf")
-      }
-    } ~ path("actor"){
-      get{
-          complete{
-            Await.result(( actor ? "TEST"), timeout.duration).asInstanceOf[String]
+      } ~ path("actor") {
+        get {
+          complete {
+            Await.result((actor ? "TEST"), timeout.duration).asInstanceOf[String]
           }
+        }
       }
     }
   }
