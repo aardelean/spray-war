@@ -1,10 +1,15 @@
 package home.endpoints
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{ActorRef, Props, Actor, ActorLogging}
+import akka.util.Timeout
 import home.config.InfinispanConfig
+import home.endpoint.ServiceActor
 import spray.http.HttpMethods._
 import spray.http.{HttpRequest, HttpResponse, Uri}
 import spray.routing.Directives._
+import scala.concurrent.Await
+import scala.concurrent.duration._
+import akka.pattern.{ ask, pipe }
 import spray.routing.HttpServiceActor
 
 /**
@@ -12,6 +17,8 @@ import spray.routing.HttpServiceActor
  * Simple actor
  */
 class Endpoint() extends HttpServiceActor with ActorLogging{
+  implicit val timeout = Timeout(5 seconds)
+  val serviceActor: ActorRef = context.actorOf(Props[ServiceActor], "ServiceActor")
 
   override def receive = runRoute{
     path("persist") {
@@ -34,6 +41,12 @@ class Endpoint() extends HttpServiceActor with ActorLogging{
     } ~ path("check"){
       get {
         complete("VERIFIED!")
+      }
+    } ~ path("actor"){
+      get {
+        complete{
+            Await.result(( serviceActor ? "TEST"), timeout.duration).asInstanceOf[String]
+          }
       }
     }
   }
