@@ -10,7 +10,15 @@
 
         </local-cache>
         <replicated-cache name="replicatedKintakaWording" mode="ASYNC" >
-            <expiration interval="30000" lifespan="30000" />
+            <expiration interval="300000" lifespan="300000" />
+            <eviction max-entries="10" strategy="LRU" />
+            <persistence passivation="true">
+                <file-store fetch-state="true"
+                            read-only="false"
+                            purge="false" path="D:/infinispan/kintaka">
+                    <write-behind />
+                </file-store>
+            </persistence>
         </replicated-cache>
     </cache-container>
 </infinispan>
